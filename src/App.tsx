@@ -7,19 +7,21 @@ import ReactFlow, {
   Controls,
   Node,
   useEdgesState,
-  useNodesState
+  useNodesState,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import * as Toolbar from '@radix-ui/react-toolbar';
-import DefaultEdge from './edges/DefaultEdge';
 import { zinc } from 'tailwindcss/colors';
 
 import { Square } from './nodes/Square';
 import { Ellipse } from './nodes/Ellipse';
+import { Toolbar } from './components/Toolbar';
+import { DefaultEdge } from './edges/DefaultEdge';
+import { Triangle } from './nodes/Triangle';
 
-const NODE_TYPES = {
+export const NODE_TYPES = {
   square: Square,
   ellipse: Ellipse,
+  triangle: Triangle,
 }
 
 const EDGE_TYPES = {
@@ -49,18 +51,6 @@ export const App = () => {
     return setEdges(edges => addEdge(connection, edges));
   }, []);
 
-  function addSquareNode(type: keyof typeof NODE_TYPES) {
-    setNodes(nodes => [
-      ...nodes,
-      {
-        id: crypto.randomUUID(),
-        type,
-        position: { x: 750, y: 350 },
-        data: {}
-      }
-    ]);
-  }
-
   return (
     <div className='w-screen h-screen'>
       <ReactFlow
@@ -85,18 +75,7 @@ export const App = () => {
         <Controls />
       </ReactFlow>
 
-
-      <Toolbar.Root className='fixed flex gap-3 bottom-20 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-lg border border-zinc-300 px-8 h-20 w-96 overflow-hidden'>
-        <Toolbar.Button
-          onClick={() => addSquareNode('square')}
-          className='w-24 h-24 bg-violet-500 mt-6 rounded hover:-translate-y-2 transition-transform'
-        />
-
-        <Toolbar.Button
-          onClick={() => addSquareNode('ellipse')}
-          className='w-24 h-24 bg-violet-500 mt-6 rounded-2/1 hover:-translate-y-2 transition-transform'
-        />
-      </Toolbar.Root>
+      <Toolbar setNodes={setNodes} />
     </div>
   )
 }
